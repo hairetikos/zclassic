@@ -69,6 +69,8 @@
 #endif
 
 #include <fstream>
+#include <thread>
+#include <chrono>
 #include "librustzcash.h"
 #include "sha256.h"
 #include <curl/curl.h>

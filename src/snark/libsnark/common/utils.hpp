@@ -11,6 +11,7 @@
 #define UTILS_HPP_
 
 #include <cassert>
+#include <cstdint>
 #include <iostream>
 #include <sstream>
 #include <string>

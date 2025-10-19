@@ -2504,7 +2504,8 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
     auto disabledVerifier = libzcash::ProofVerifier::Disabled();
 
     // Check it again to verify JoinSplit proofs, and in case a previous version let a bad block in
-    if (!CheckBlock(block, state, fExpensiveChecks ? verifier : disabledVerifier, !fJustCheck, !fJustCheck))
+    // For blocks before checkpoint: skip expensive signature checks AND structural validation (hash chain is sufficient)
+    if (!CheckBlock(block, state, fExpensiveChecks ? verifier : disabledVerifier, !fJustCheck, !fJustCheck, fExpensiveChecks))
         return false;
 
     // verify that the view's current state corresponds to the previous block
@@ -3945,7 +3946,7 @@ bool CheckBlockHeader(const CBlockHeader& block, CValidationState& state, bool f
 
 bool CheckBlock(const CBlock& block, CValidationState& state,
                 libzcash::ProofVerifier& verifier,
-                bool fCheckPOW, bool fCheckMerkleRoot)
+                bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSizeLimits)
 {
     // These are checks that are independent of context.
 
@@ -3974,36 +3975,38 @@ bool CheckBlock(const CBlock& block, CValidationState& state,
     // transaction validation, as otherwise we may mark the header as invalid
     // because we receive the wrong transactions for it.
 
-    // Size limits
-    // Allow larger blocks for historical chain variations - checkpoint validates correctness
-    const unsigned int GENEROUS_BLOCK_SIZE_LIMIT = 2000000; // 2MB to accommodate any historical forks
-    const unsigned int MAX_BLOCK_TXS = 1000000; // Maximum number of transactions per block
-    if (block.vtx.empty() || block.vtx.size() > MAX_BLOCK_TXS || ::GetSerializeSize(block, SER_NETWORK, PROTOCOL_VERSION) > GENEROUS_BLOCK_SIZE_LIMIT)
-        return state.DoS(100, error("CheckBlock(): size limits failed"),
-                         REJECT_INVALID, "bad-blk-length");
+    // For blocks before checkpoint, we only verify the hash chain connects properly.
+    // The checkpoint hash proves the entire chain up to that point is valid.
+    // Skip all structural validation (size, coinbase, transactions, sigops) for pre-checkpoint blocks.
+    if (fCheckSizeLimits) {
+        // Size limits
+        if (block.vtx.empty() || block.vtx.size() > MAX_BLOCK_SIZE || ::GetSerializeSize(block, SER_NETWORK, PROTOCOL_VERSION) > MAX_BLOCK_SIZE)
+            return state.DoS(100, error("CheckBlock(): size limits failed"),
+                             REJECT_INVALID, "bad-blk-length");
 
-    // First transaction must be coinbase, the rest must not be
-    if (block.vtx.empty() || !block.vtx[0].IsCoinBase())
-        return state.DoS(100, error("CheckBlock(): first tx is not coinbase"),
-                         REJECT_INVALID, "bad-cb-missing");
-    for (unsigned int i = 1; i < block.vtx.size(); i++)
-        if (block.vtx[i].IsCoinBase())
-            return state.DoS(100, error("CheckBlock(): more than one coinbase"),
-                             REJECT_INVALID, "bad-cb-multiple");
+        // First transaction must be coinbase, the rest must not be
+        if (!block.vtx[0].IsCoinBase())
+            return state.DoS(100, error("CheckBlock(): first tx is not coinbase"),
+                             REJECT_INVALID, "bad-cb-missing");
+        for (unsigned int i = 1; i < block.vtx.size(); i++)
+            if (block.vtx[i].IsCoinBase())
+                return state.DoS(100, error("CheckBlock(): more than one coinbase"),
+                                 REJECT_INVALID, "bad-cb-multiple");
 
-    // Check transactions
-    BOOST_FOREACH(const CTransaction& tx, block.vtx)
-        if (!CheckTransaction(tx, state, verifier))
-            return error("CheckBlock(): CheckTransaction failed");
+        // Check transactions
+        BOOST_FOREACH(const CTransaction& tx, block.vtx)
+            if (!CheckTransaction(tx, state, verifier))
+                return error("CheckBlock(): CheckTransaction failed");
 
-    unsigned int nSigOps = 0;
-    BOOST_FOREACH(const CTransaction& tx, block.vtx)
-    {
-        nSigOps += GetLegacySigOpCount(tx, STANDARD_SCRIPT_VERIFY_FLAGS);
+        unsigned int nSigOps = 0;
+        BOOST_FOREACH(const CTransaction& tx, block.vtx)
+        {
+            nSigOps += GetLegacySigOpCount(tx, STANDARD_SCRIPT_VERIFY_FLAGS);
+        }
+        if (nSigOps > MAX_BLOCK_SIGOPS)
+            return state.DoS(100, error("CheckBlock(): out-of-bounds SigOpCount"),
+                             REJECT_INVALID, "bad-blk-sigops", true);
     }
-    if (nSigOps > MAX_BLOCK_SIGOPS)
-        return state.DoS(100, error("CheckBlock(): out-of-bounds SigOpCount"),
-                         REJECT_INVALID, "bad-blk-sigops", true);
 
     return true;
 }

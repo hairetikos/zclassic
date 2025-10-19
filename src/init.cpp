@@ -370,6 +370,7 @@ std::string HelpMessage(HelpMessageMode mode)
             "Warning: Reverting this setting requires re-downloading the entire blockchain. "
             "(default: 0 = disable pruning blocks, >%u = target size in MiB to use for block files)"), MIN_DISK_SPACE_FOR_BLOCK_FILES / 1024 / 1024));
     strUsage += HelpMessageOpt("-reindex", _("Rebuild block chain index from current blk000??.dat files on startup"));
+    strUsage += HelpMessageOpt("-nofastsync", _("Disable fast-sync from Arweave, sync from genesis with checkpoint trust (default: 0)"));
 #if !defined(WIN32)
     strUsage += HelpMessageOpt("-sysperms", _("Create new files with system default permissions, instead of umask 077 (only effective with disabled wallet functionality)"));
 #endif
@@ -957,8 +958,10 @@ bool InitSanityCheck(void)
 
     fprintf(stdout, "Network: %s\n", Params().NetworkIDString().c_str());
 
-    if ((network == "main") && (
-        !boost::filesystem::exists(blocks_dir) || 
+    // Fast-sync from Arweave (can be disabled with -nofastsync flag)
+    bool nofastsync = GetBoolArg("-nofastsync", false);
+    if (!nofastsync && (network == "main") && (
+        !boost::filesystem::exists(blocks_dir) ||
         !boost::filesystem::exists(chainstate_dir)
         )){
 
@@ -15081,6 +15084,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
     // ********************************************************* Step 7: load block chain
 
     fReindex = GetBoolArg("-reindex", false);
+    fNoFastSync = GetBoolArg("-nofastsync", false);
 
     // Upgrading to 0.8; hard-link the old blknnnn.dat files into /blocks/
     boost::filesystem::path blocksDir = GetDataDir() / "blocks";

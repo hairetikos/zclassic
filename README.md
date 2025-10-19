@@ -3,65 +3,54 @@ ZClassic 2.1.1-8
 
 ## Getting Started
 
-### Building
+### Building from Source
 
-Build ZClassic along with most dependencies from source by running:
+For comprehensive build instructions, troubleshooting, and advanced options, see [BUILD.md](BUILD.md).
 
-Clone the repository
+#### Quick Start (Ubuntu/Debian)
 
-```{r, engine='bash'}
+```bash
+# Clone the repository
 git clone https://github.com/ZclassicCommunity/zclassic.git
 cd zclassic
-```
 
-Get dependencies
+# Install dependencies
+./zcutil/install-deps.sh
 
-```{r, engine='bash'}
-# Ubuntu 22.04
-
-sudo apt-get install \
- build-essential pkg-config libc6-dev m4 g++-multilib \
- autoconf libtool ncurses-dev unzip git python3 python3-zmq \
- zlib1g-dev curl bsdmainutils automake libtinfo5 libcurl4-gnutls-dev
-```
-
-```{r, engine='bash'}
-# Ubuntu 18.04
-
-sudo apt-get install \
-build-essential pkg-config libc6-dev m4 g++-multilib \
-autoconf libtool ncurses-dev unzip git python python-zmq \
-zlib1g-dev wget curl bsdmainutils automake
-```
-
-Install
-
-```{r, engine='bash'}
-# Build from source:
+# Build ZClassic
 ./zcutil/build.sh -j$(nproc)
-# strip binary for production use
-strip ./src/zclassicd
-
-# run binary
-./src/zclassicd
 ```
 
+The compiled binaries will be in the `src/` directory.
 
-Before running the ZClassic daemon, you need to create a configuration file `zclassic.conf` in `~/.zclassic`. Here's an example.
+#### First Run - Fast Sync
 
-```{r, engine='bash'}
+On first run, `zclassicd` will automatically:
+- Download ZCash cryptographic parameters (~1.6 GB)
+- Download initial blockchain state from Arweave (~8.8 GB)
+- Create a default configuration file
+
+This fast-sync feature saves hours compared to syncing from genesis.
+
+### Running ZClassic
+
+```bash
+# Start the daemon (uses ~/.zclassic as data directory)
+./src/zclassicd
+
+# Use custom data directory and ports
+./src/zclassicd -datadir=/path/to/datadir -port=8033 -rpcport=8023
+```
+
+#### Configuration
+
+You can create a configuration file `zclassic.conf` in `~/.zclassic` to customize settings:
+
+```
 txindex=1
 gen=0
-```
-
-Run
-
-```{r, engine='bash'}
-LC_ALL=C ./src/zclassicd
-
-# run binary
-./zclassicd 
-
+rpcuser=yourusername
+rpcpassword=yourpassword
 ```
 ## What is ZClassic?
 

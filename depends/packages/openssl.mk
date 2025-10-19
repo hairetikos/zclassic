@@ -7,7 +7,7 @@ $(package)_patches=ssl_fix.patch
 
 define $(package)_set_vars
 $(package)_config_env=AR="$($(package)_ar)" RANLIB="$($(package)_ranlib)" CC="$($(package)_cc)"
-$(package)_config_env_darwin=CC="$($(package)_cc) -isysroot$(shell xcrun --show-sdk-path)"
+$(package)_config_env_darwin=CC="$($(package)_cc) $(shell command -v xcrun >/dev/null 2>&1 && echo "-isysroot$$(xcrun --show-sdk-path)")"
 $(package)_config_opts=--prefix=$(host_prefix) --openssldir=$(host_prefix)/etc/openssl
 $(package)_config_opts+=no-afalgeng
 $(package)_config_opts+=no-asm

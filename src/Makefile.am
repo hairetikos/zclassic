@@ -465,7 +465,8 @@ zclassicd_LDADD += \
   $(ZMQ_LIBS) \
   $(PROTON_LIBS) \
   $(LIBBITCOIN_CRYPTO) \
-  $(LIBZCASH_LIBS)
+  $(LIBZCASH_LIBS) \
+  -lcurl
 
 # bitcoin-cli binary #
 zclassic_cli_SOURCES = bitcoin-cli.cpp
@@ -604,6 +605,10 @@ if HARDEN
 	@echo "Checking binary security of [$(bin_PROGRAMS)]..."
 	$(AM_V_at) READELF=$(READELF) OBJDUMP=$(OBJDUMP) $(top_srcdir)/contrib/devtools/security-check.py $(bin_PROGRAMS)
 endif
+
+strip: $(bin_PROGRAMS)
+	@echo "Stripping binaries to reduce size..."
+	$(AM_V_at)$(STRIP) $(bin_PROGRAMS)
 
 %.pb.cc %.pb.h: %.proto
 	@test -f $(PROTOC)

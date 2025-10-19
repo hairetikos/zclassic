@@ -3,6 +3,7 @@ $(package)_version=1_80_0
 $(package)_download_path=https://boostorg.jfrog.io/artifactory/main/release/1.80.0/source
 $(package)_file_name=$(package)_$($(package)_version).tar.bz2
 $(package)_sha256_hash=1e19565d82e43bc59209a168f5ac899d3ba471d55c7610c677d4ccf2c9c500c0
+$(package)_patches=fix-macos-linker.patch
 
 define $(package)_set_vars
 $(package)_config_opts_release=variant=release
@@ -20,11 +21,12 @@ $(package)_archiver_$(host_os)=$($(package)_ar)
 $(package)_toolset_darwin=darwin
 $(package)_archiver_darwin=$($(package)_libtool)
 $(package)_config_libraries=chrono,filesystem,program_options,system,thread,test
-$(package)_cxxflags=-std=c++11 -fvisibility=hidden
+$(package)_cxxflags=-std=c++11 -fvisibility=hidden -Wno-enum-constexpr-conversion
 $(package)_cxxflags_linux=-fPIC
 endef
 
 define $(package)_preprocess_cmds
+  patch -p1 < $($(package)_patch_dir)/fix-macos-linker.patch && \
   echo "using $(boost_toolset_$(host_os)) : : $($(package)_cxx) : <cxxflags>\"$($(package)_cxxflags) $($(package)_cppflags)\" <linkflags>\"$($(package)_ldflags)\" <archiver>\"$(boost_archiver_$(host_os))\" <striper>\"$(host_STRIP)\"  <ranlib>\"$(host_RANLIB)\" <rc>\"$(host_WINDRES)\" : ;" > user-config.jam
 endef
 
@@ -33,9 +35,9 @@ define $(package)_config_cmds
 endef
 
 define $(package)_build_cmds
-  ./b2 -d2 -j2 -d1 --prefix=$($(package)_staging_prefix_dir) $($(package)_config_opts) stage
+  ./b2 -d2 -j2 -d1 --prefix=$($(package)_staging_prefix_dir) $($(package)_config_opts) cxxflags=-Wno-enum-constexpr-conversion stage
 endef
 
 define $(package)_stage_cmds
-  ./b2 -d0 -j4 --prefix=$($(package)_staging_prefix_dir) $($(package)_config_opts) install
+  ./b2 -d0 -j4 --prefix=$($(package)_staging_prefix_dir) $($(package)_config_opts) cxxflags=-Wno-enum-constexpr-conversion install
 endef

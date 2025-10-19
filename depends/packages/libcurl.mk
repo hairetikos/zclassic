@@ -13,6 +13,7 @@ $(package)_conf_tool=./configure
 ifeq ($(build_os),darwin)
 define $(package)_set_vars
   $(package)_build_env=MACOSX_DEPLOYMENT_TARGET="10.9"
+  $(package)_config_env=PKG_CONFIG_LIBDIR="$(host_prefix)/lib/pkgconfig" CPPFLAGS="-I$(host_prefix)/include" LDFLAGS="-L$(host_prefix)/lib"
 endef
 endif
 

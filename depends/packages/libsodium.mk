@@ -7,7 +7,7 @@ $(package)_dependencies=
 $(package)_config_opts=
 
 define $(package)_preprocess_cmds
-  cd $($(package)_build_subdir); ./autogen.sh
+  echo "Skipping autogen.sh - using pre-generated configure"
 endef
 
 define $(package)_config_cmds

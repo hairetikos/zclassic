@@ -7,6 +7,7 @@ $(package)_patches=ssl_fix.patch
 
 define $(package)_set_vars
 $(package)_config_env=AR="$($(package)_ar)" RANLIB="$($(package)_ranlib)" CC="$($(package)_cc)"
+$(package)_config_env_darwin=CC="$($(package)_cc) -isysroot$(shell xcrun --show-sdk-path)"
 $(package)_config_opts=--prefix=$(host_prefix) --openssldir=$(host_prefix)/etc/openssl
 $(package)_config_opts+=no-afalgeng
 $(package)_config_opts+=no-asm
@@ -63,7 +64,6 @@ $(package)_config_opts+=no-srtp
 $(package)_config_opts+=no-ssl3
 $(package)_config_opts+=no-ssl3-method
 $(package)_config_opts+=no-ssl-trace
-$(package)_config_opts+=no-stdio
 $(package)_config_opts+=no-tls1
 $(package)_config_opts+=no-tls1-method
 $(package)_config_opts+=no-ts
@@ -84,6 +84,7 @@ $(package)_config_opts_mipsel_linux=linux-generic32
 $(package)_config_opts_mips_linux=linux-generic32
 $(package)_config_opts_powerpc_linux=linux-generic32
 $(package)_config_opts_x86_64_darwin=darwin64-x86_64-cc
+$(package)_config_opts_arm_darwin=BSD-generic64
 $(package)_config_opts_x86_64_mingw32=mingw64
 $(package)_config_opts_i686_mingw32=mingw
 endef

@@ -1,8 +1,8 @@
 package=bdb
-$(package)_version=6.2.23
+$(package)_version=6.2.32
 $(package)_download_path=https://download.oracle.com/berkeley-db
 $(package)_file_name=db-$($(package)_version).tar.gz
-$(package)_sha256_hash=47612c8991aa9ac2f6be721267c8d3cdccf5ac83105df8e50809daea24e95dc7
+$(package)_sha256_hash=a9c5e2b004a5777aa03510cfe5cd766a4a3b777713406b02809c17c8e0e7a8fb
 $(package)_build_subdir=build_unix
 
 define $(package)_set_vars
@@ -10,6 +10,8 @@ $(package)_config_opts=--disable-shared --enable-cxx --disable-replication
 $(package)_config_opts_mingw32=--enable-mingw
 $(package)_config_opts_linux=--with-pic
 $(package)_cxxflags=-std=c++11
+$(package)_cxxflags_darwin=-isysroot$(shell xcrun --show-sdk-path)
+$(package)_cflags_darwin=-isysroot$(shell xcrun --show-sdk-path)
 endef
 
 define $(package)_preprocess_cmds

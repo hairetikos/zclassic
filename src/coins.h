@@ -506,7 +506,7 @@ public:
     /**
      * Return a modifiable reference to a CCoins. Assumes that no entry with the given
      * txid exists and creates a new one. This saves a database access in the case where
-     * the coins were to be wiped out by FromTx anyway. We rely on Zcash-derived block chains
+     * the coins were to be wiped out by FromTx anyway. We rely on Zclassic-derived block chains
      * having no duplicate transactions, since BIP 30 and (except for the genesis block)
      * BIP 34 have been enforced since launch. See the Zcash protocol specification, section
      * "Bitcoin Improvement Proposals". Simultaneous modifications are not allowed.

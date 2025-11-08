@@ -445,7 +445,7 @@ bool enableVTMode()
 void ThreadShowMetricsScreen()
 {
     // Make this thread recognisable as the metrics screen thread
-    RenameThread("zcash-metrics-screen");
+    RenameThread("zcl-metrics");
 
 #ifdef WIN32
     bool clearedAfterLoaded = false;

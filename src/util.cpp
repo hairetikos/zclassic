@@ -462,10 +462,10 @@ void PrintExceptionContinue(const std::exception* pex, const char* pszThread)
 boost::filesystem::path GetDefaultDataDir()
 {
     namespace fs = boost::filesystem;
-    // Windows < Vista: C:\Documents and Settings\Username\Application Data\Zcash
-    // Windows >= Vista: C:\Users\Username\AppData\Roaming\Zcash
-    // Mac: ~/Library/Application Support/Zcash
-    // Unix: ~/.zcash
+    // Windows < Vista: C:\Documents and Settings\Username\Application Data\ZClassic
+    // Windows >= Vista: C:\Users\Username\AppData\Roaming\ZClassic
+    // Mac: ~/Library/Application Support/ZClassic
+    // Unix: ~/.zclassic
 #ifdef WIN32
     // Windows
     return GetSpecialFolderPath(CSIDL_APPDATA) / "ZClassic";

@@ -907,32 +907,32 @@ bool InitSanityCheck(void)
         Download("https://arweave.net/gU3OHUYTQm5upHoBVkAk8uO1ZUEIqV7WE5A0tq19BUQ",
             sapling_output.string(), 
             "2f0ebbcbb9bb0bcffe95a397e7eba89c29eb4dde6191c339db88570e3f3fb0e4");
-        LogPrintf("Zclassic Params Download: 20\% Complete\n");
-        uiInterface.InitMessage("Zclassic Params Download: 20\% Complete\n");
+        LogPrintf("Zcash Params Download: 20\% Complete\n");
+        uiInterface.InitMessage("Zcash Params Download: 20\% Complete\n");
 
         Download("https://arweave.net/l9YZ_NAT-BVUmAr6619gPB-gkYbhqS4X3LaSNHODG3w", 
             sapling_spend.string(), 
             "8e48ffd23abb3a5fd9c5589204f32d9c31285a04b78096ba40a79b75677efc13");
-        LogPrintf("Zclassic Params Download: 40\% Complete\n");
-        uiInterface.InitMessage("Zclassic Params Download: 40\% Complete\n");
+        LogPrintf("Zcash Params Download: 40\% Complete\n");
+        uiInterface.InitMessage("Zcash Params Download: 40\% Complete\n");
 
         Download("https://arweave.net/dDQTbljCkBZPAFA7P7PWLN3hg6eyRLcVX_zoDmrUf90", 
             sprout_groth16.string(), 
             "b685d700c60328498fbde589c8c7c484c722b788b265b72af448a5bf0ee55b50");
-        LogPrintf("Zclassic Params Download: 60\% Complete\n");
-        uiInterface.InitMessage("Zclassic Params Download: 60\% Complete\n");
+        LogPrintf("Zcash Params Download: 60\% Complete\n");
+        uiInterface.InitMessage("Zcash Params Download: 60\% Complete\n");
 
         Download("https://arweave.net/4bm3yO6rj77fdI35V9SlhGBTBDPPC26KHHQRuQzb0DI", 
             pk_path.string(), 
             "8bc20a7f013b2b58970cddd2e7ea028975c88ae7ceb9259a5344a16bc2c0eef7");
-        LogPrintf("Zclassic Params Download: 80\% Complete\n");
-        uiInterface.InitMessage("Zclassic Params Download: 80\% Complete\n");
+        LogPrintf("Zcash Params Download: 80\% Complete\n");
+        uiInterface.InitMessage("Zcash Params Download: 80\% Complete\n");
 
         Download("https://arweave.net/AS2kCHFDIa1lc_4FHVQ85XDTVXLZey57q2zoE2Mjyi0", 
             vk_path.string(), 
             "4bd498dae0aacfd8e98dc306338d017d9c08dd0918ead18172bd0aec2fc5df82");
-        LogPrintf("Zclassic Params Download: 100\% Complete\n");
-        uiInterface.InitMessage("Zclassic Params Download: 100\% Complete\n");
+        LogPrintf("Zcash Params Download: 100\% Complete\n");
+        uiInterface.InitMessage("Zcash Params Download: 100\% Complete\n");
     }
 
 
@@ -14334,7 +14334,7 @@ static void ZC_LoadParams(
         boost::filesystem::exists(sprout_groth16)
     )) {
         uiInterface.ThreadSafeMessageBox(strprintf(
-            _("Cannot find the Zclassic network parameters in the following directory:\n"
+            _("Cannot find the Zcash network parameters in the following directory:\n"
               "%s\n"
               "Please run 'zclassic-fetch-params' or './zcutil/fetch-params.sh' and then restart."),
                 ZC_GetParamsDir()),

@@ -4,9 +4,9 @@ $(package)_dependencies=openssl
 $(package)_download_path=https://curl.se/download
 $(package)_file_name=curl-$($(package)_version).tar.xz
 $(package)_sha256_hash=73a4b0e99596a09fa5924a4fb7e4b995a85fda0d18a2c02ab9cf134bebce04ee
-$(package)_config_opts_linux=--disable-shared --enable-static --prefix=$(host_prefix) --host=$(HOST) --with-openssl
-$(package)_config_opts_mingw32=--enable-mingw --disable-shared --enable-static --prefix=$(host_prefix) --host=x86_64-w64-mingw32 --with-openssl
-$(package)_config_opts_darwin=--disable-shared --enable-static --prefix=$(host_prefix) --with-openssl
+$(package)_config_opts_linux=--disable-shared --enable-static --prefix=$(host_prefix) --host=$(HOST) --with-openssl --without-libpsl
+$(package)_config_opts_mingw32=--enable-mingw --disable-shared --enable-static --prefix=$(host_prefix) --host=x86_64-w64-mingw32 --with-openssl --without-libpsl
+$(package)_config_opts_darwin=--disable-shared --enable-static --prefix=$(host_prefix) --with-openssl --without-libpsl
 $(package)_cflags_darwin=-mmacosx-version-min=10.9
 $(package)_conf_tool=./configure
 

@@ -1,4 +1,4 @@
-ZClassic 2.1.1-8
+ZClassic 2.1.2
 
 ## Getting Started
 

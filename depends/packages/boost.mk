@@ -1,8 +1,8 @@
 package=boost
-$(package)_version=1_80_0
-$(package)_download_path=https://archives.boost.io/release/1.80.0/source
+$(package)_version=1_85_0
+$(package)_download_path=https://archives.boost.io/release/1.85.0/source
 $(package)_file_name=$(package)_$($(package)_version).tar.bz2
-$(package)_sha256_hash=1e19565d82e43bc59209a168f5ac899d3ba471d55c7610c677d4ccf2c9c500c0
+$(package)_sha256_hash=7009fe1faa1697476bdc7027703a2badb84e849b7b0baad5086b087b971f8617
 $(package)_patches=fix-macos-linker.patch
 
 define $(package)_set_vars

@@ -1,8 +1,8 @@
 package=libgmp
-$(package)_version=6.1.1
+$(package)_version=6.3.0
 $(package)_download_path=https://gmplib.org/download/gmp/
 $(package)_file_name=gmp-$($(package)_version).tar.bz2
-$(package)_sha256_hash=a8109865f2893f1373b0a8ed5ff7429de8db696fc451b1036bd7bdf95bbeffd6
+$(package)_sha256_hash=a8f40f5e4aa7f7c643c286e6749a8437cffc0d9666a907b6b11ed3be48caa20e
 $(package)_dependencies=
 $(package)_config_opts=--enable-cxx --disable-shared
 $(package)_config_opts_arm_darwin=--disable-assembly

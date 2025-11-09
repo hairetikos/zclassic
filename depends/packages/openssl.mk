@@ -1,8 +1,8 @@
 package=openssl
-$(package)_version=1.1.1a
+$(package)_version=1.1.1w
 $(package)_download_path=https://www.openssl.org/source
 $(package)_file_name=$(package)-$($(package)_version).tar.gz
-$(package)_sha256_hash=fc20130f8b7cbd2fb918b2f14e2f429e109c31ddd0fb38fc5d71d9ffed3f9f41
+$(package)_sha256_hash=cf3098950cb4d853ad95c0841f1f9c6d3dc102dccfcacd521d93925208b76ac8
 $(package)_patches=ssl_fix.patch
 
 define $(package)_set_vars
